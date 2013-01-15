@@ -1,0 +1,38 @@
+{
+	"name": "riakio",
+	"description": "Node.js module over riak's HTTP API",
+	"version": "0.1.0",
+	"keywords": [
+		"riak",
+		"basho",
+		"nosql"
+	],
+	"author": {
+		"name": "Phillip Clark",
+		"email": "phillip@flitbit.org"
+	},
+	"repository": { "type": "git", "url": "git://github.com/flitbit/riakio.git" },
+	"main": "./index.js",
+	"directories": {
+		"test": "./test"
+	},
+	"dependencies": {
+		"request": ">=2.11.x",
+		"node-oops": "0.1.x",
+		"hooked": "0.1.x",
+		"deep-diff": "0.1.x",
+		"nconf": "0.6.x",
+		"winston": "0.6.x",
+		"extend": "1.0.x",
+		"async": "0.1.x",
+		"lodash": "0.9.x"
+
+	},
+	"devDependencies" : {
+		"vows": ">=0.6.4",
+		"should": ">=1.2"
+	},
+	"scripts": {
+		"test": "vows --spec ./test/*"
+	}
+}
