@@ -29,7 +29,7 @@ function listBuckets() {
 			process.nextTick(getBucket.bind(this, name));
 		}
 
-			process.nextTick(getBucket.bind(this, 'bogus'));
+		process.nextTick(getBucket.bind(this, 'bogus'));
 	});
 
 }
