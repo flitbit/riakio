@@ -31,11 +31,10 @@ function listBuckets() {
 
 		process.nextTick(getBucket.bind(this, 'bogus'));
 	});
-
 }
 
-function checkServerStats() {
-	svr.stats(function(err, res) {
+function checkServerStatus() {
+	svr.status(function(err, res) {
 		if (err) {
 			console.log('failed to get stats from the server:\n'.concat(util.inspect(err, false, 12)));
 			process.exit();
@@ -51,5 +50,5 @@ svr.ping(function(err, res) {
 		process.exit();
 	}
 	console.log('successfully pinged the server');
-	process.nextTick(checkServerStats);
+	process.nextTick(checkServerStatus);
 });

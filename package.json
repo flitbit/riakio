@@ -28,9 +28,9 @@
 		"lodash": "0.9.x"
 
 	},
-	"devDependencies" : {
-		"vows": ">=0.6.4",
-		"should": ">=1.2"
+	"devDependencies": {
+			"expect.js": "~0.2.x",
+			"mocha": "~1.10.x"
 	},
 	"scripts": {
 		"test": "vows --spec ./test/*"

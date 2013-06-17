@@ -1,56 +1,113 @@
 var util = require('util')
+, log = require('winston')
 , config = require('../').config
-, server = require('../').server;
+, server = require('../').server
+;
 
 var uri = config.get('riak:uri');
 
 var svr = server.create(uri);
 
-function getBucket(name) {
-	svr.bucket(name, function(err, res) {
-		if (err) {
-			console.log('failed to get bucket('.concat(name, '):\n', util.inspect(err, false, 12)));
-			process.exit();
-		}
-		console.log('successfully got bucket('.concat(name, ')'));
-	});
+function echo(err, res) {
+	if (err) log.error(util.inspect(err, false, 10));
+	else log.info(util.inspect(res, false, 10));
 }
 
-function listBuckets() {
-	svr.listBuckets(function(err, res) {
-		if (err) {
-			console.log('failed to list buckets:\n'.concat(util.inspect(err, false, 12)));
-			process.exit();
+function mapWithPropertyMatching(v,keyData,arg){
+	var data = [];
+	if (!v.values[0].metadata['X-Riak-Deleted']) {
+		var items = Riak.mapValuesJson(v);
+		if (items[0][arg.prop] === arg.value) {
+			data.push({
+				bucket: v.bucket,
+				key: v.key,
+			data: items[0]});
 		}
-		console.log('successfully listed buckets');
-		var i;
-		for(i = 0; i < res.result.length; i++) {
-			var name = res.result[i];
-			process.nextTick(getBucket.bind(this, name));
-		}
-
-			process.nextTick(getBucket.bind(this, 'bogus'));
-	});
-
-}
-
-function checkServerStats() {
-	svr.stats(function(err, res) {
-		if (err) {
-			console.log('failed to get stats from the server:\n'.concat(util.inspect(err, false, 12)));
-			process.exit();
-		}
-		console.log('successfully received stats from the server');
-		process.nextTick(listBuckets);
-	});
-}
-
-svr.ping(function(err, res) {
-	if (err) {
-		console.log('failed to ping the server:\n'.concat(util.inspect(err, false, 12)));
-		process.exit();
 	}
-	console.log('successfully pinged the server');
-	process.nextTick(checkServerStats);
-});
+	return data;
+}
 
+function firstN(values, n) {
+	return values.slice(0, n);
+}
+
+function performMapReduce(bucket) {
+	bucket.mapred({
+		phases: [
+		{
+			map: function(v, k, a) {
+				var accum = [];
+				if (!v.values[0].metadata['X-Riak-Deleted']) {
+					var items = Riak.mapValuesJson(v);
+					if (items[0][a.prop] && items[0][a.prop].indexOf(a.value) >= 0) {
+						accum.push({
+							bucket: v.bucket,
+							key: v.key,
+							data: items[0]});
+					}
+				}
+				return accum;
+			},
+			a: { prop: 'what', value: 'example_6' }
+		}
+		]}
+		, echo);
+}
+
+function updateItem(item) {
+	item.touch_date = (new Date()).toISOString();
+
+	item.save(echo);
+}
+
+function getItemsByKey(bucket, keys) {
+	var items = bucket.items;
+
+	keys.forEach(function(it) {
+		items.byKey(it, function(err, res) {
+			echo(err, res);
+			if (err) process.exit();
+
+			process.nextTick(function() { updateItem(res.result); })
+
+		});
+	});
+}
+
+function listBucketKeys(bucket) {
+	bucket.keys(null, function(err, res) {
+		echo(err, res);
+		if (err) process.exit();
+
+		process.nextTick(function() { performMapReduce(bucket); })
+		getItemsByKey(bucket, res.result);
+	});
+}
+
+function setBucketProps(bucket) {
+	var props = { allow_mult: false };
+	bucket.setProps(props,
+		function(err, res) {
+			echo(err, res);
+			if (err) process.exit();
+
+			process.nextTick(function() { listBucketKeys(bucket); });
+		});
+}
+
+function getBucketProps(bucket) {
+	bucket.getProps(
+		function(err, res) {
+			echo(err, res);
+			if (err) process.exit();
+
+			process.nextTick(function() { setBucketProps(bucket); });
+		});
+}
+
+svr.bucket('examples', function(err, res) {
+	echo(err, res);
+	if (err) process.exit();
+
+	process.nextTick(function() { getBucketProps(res.result); });
+});
