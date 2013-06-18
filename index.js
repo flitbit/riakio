@@ -3,6 +3,7 @@ var config = require('./config')
 , riak   = require('./lib/riak')
 , server = require('./lib/server')
 , bucket = require('./lib/bucket')
+, filters = require('./lib/key_filters')
 ;
 
 function ServerAdapter(url) {
@@ -30,8 +31,12 @@ Object.defineProperties(ServerAdapter, {
 	bucket: {
 		value: bucket,
 		enumerable: true
-	}
+	},
 
+	filters: {
+		value: filters,
+		enumerable: true
+	}
 });
 
 module.exports = ServerAdapter;

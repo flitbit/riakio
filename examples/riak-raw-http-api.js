@@ -128,6 +128,8 @@ request(get_bucket_properties, function(err, res, body) {
 
 // 2 Object/Key Operations
 
+// 2.1 HTTP Fetch Object
+
 var id = utils.sequence();
 
 var fetch_object = extend({
@@ -147,6 +149,8 @@ request(fetch_object, function(err, res, body) {
 				res.statusCode,
 				' - Not found; creating it now...'
 				));
+
+// 2.2 HTTP Store Object
 
 			var store_object = extend({
 				method: 'POST',
@@ -171,6 +175,7 @@ request(fetch_object, function(err, res, body) {
 							util.inspect(body || "No content.", false, 10)
 							));
 
+// 2.3 HTTP Delete Object
 
 						var delete_obj = extend({
 							method: 'DELETE',
@@ -203,13 +208,6 @@ request(fetch_object, function(err, res, body) {
 		}
 	}
 });
-
-
-// 2.1 HTTP Fetch Object
-// 2.2 HTTP Store Object
-// 2.3 HTTP Delete Object
-
-
 
 // 3 Query Operations
 

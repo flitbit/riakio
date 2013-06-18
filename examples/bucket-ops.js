@@ -2,6 +2,7 @@ var util = require('util')
 , log = require('winston')
 , config = require('../').config
 , server = require('../').server
+, filters = require('../').filters
 ;
 
 var uri = config.get('riak:uri');
@@ -13,18 +14,9 @@ function echo(err, res) {
 	else log.info(util.inspect(res, false, 10));
 }
 
-function mapWithPropertyMatching(v,keyData,arg){
-	var data = [];
-	if (!v.values[0].metadata['X-Riak-Deleted']) {
-		var items = Riak.mapValuesJson(v);
-		if (items[0][arg.prop] === arg.value) {
-			data.push({
-				bucket: v.bucket,
-				key: v.key,
-			data: items[0]});
-		}
-	}
-	return data;
+function mapWithPropertyMatching(v, k, a){
+	return (v.hasOwnProperty(a.prop) && v[a.prop] == a.value)
+		? [v] : [];
 }
 
 function firstN(values, n) {
@@ -33,25 +25,10 @@ function firstN(values, n) {
 
 function performMapReduce(bucket) {
 	bucket.mapred({
-		phases: [
-		{
-			map: function(v, k, a) {
-				var accum = [];
-				if (!v.values[0].metadata['X-Riak-Deleted']) {
-					var items = Riak.mapValuesJson(v);
-					if (items[0][a.prop] && items[0][a.prop].indexOf(a.value) >= 0) {
-						accum.push({
-							bucket: v.bucket,
-							key: v.key,
-							data: items[0]});
-					}
-				}
-				return accum;
-			},
-			a: { prop: 'what', value: 'example_6' }
+		filters: filters.create(filters.endsWith('_6'))
+//, phases: [{ map: mapWithPropertyMatching, arg: { prop: 'hello', value: 'world' } } ]
 		}
-		]}
-		, echo);
+ , echo);
 }
 
 function updateItem(item) {

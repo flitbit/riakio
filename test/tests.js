@@ -61,6 +61,7 @@ describe('RiakIO', function() {
 						it('#keys gets keys from the bucket', function(done) {
 							b.keys(null, function(err, res) {
 								expect(res).to.be.ok();
+								expect(res.keys).to.be('OK');
 								expect(res.keys).to.be.an(Array);
 								done(err, res);
 							});

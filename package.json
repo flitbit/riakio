@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"request": ">=2.11.x",
+		"dbc.js": "1.0.x",
 		"node-oops": "0.1.x",
 		"hooked": "0.1.x",
 		"deep-diff": "0.1.x",
