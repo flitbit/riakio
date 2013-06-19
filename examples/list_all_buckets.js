@@ -1,5 +1,5 @@
 var util = require('util'),
-should   = require('should'),
+expect   = require('expect.js'),
 log      = require('winston'),
 extend   = require('extend'),
 config   = require('../config'),
@@ -11,12 +11,12 @@ var uri = config.get('riak:uri');
 var svr = riak.riak.create(uri);
 
 function itemHandler(err, res) {
-	should.not.exist(err);
-	should.exist(res);
-	res.should.have.property('meta');
+	expect(err).to.be.an('unknown');
+	expect(res).to.be.ok();
+	expect(res).to.have.property('meta');
 	meta = res.meta;
-	meta.should.have.property('headers').instanceOf(Object);
-	res.should.have.property('body');
+	expect(meta).to.have.property('headers').and.be.an('object');
+	expect(res).to.have.property('body');
 
 	if (meta.statusCode === 300) {
 		var item = new riakio.JsonObject(svr, meta);
