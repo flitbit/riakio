@@ -1,27 +1,28 @@
 var riak = require('..')
 , expect = require('expect.js')
+, nconf    = require('nconf')
+, path     = require('path')
 ;
 
 describe('RiakIO', function() {
+
+// configure riak so we know where to find the server...
+	var config = nconf.file(path.normalize(path.join(__dirname, './test-config.json')));
+	riak(config);
+
 	describe('the imported object', function() {
 
 		describe('exposes a server object', function() {
-			var server = riak.server;
+			var server = riak.Server;
 
 			it('with a #create function', function() {
 				expect(server).to.be.ok();
-				expect(riak.server).to.have.property('create');
-				expect(riak.server.create).to.be.a('function');
-			});
-
-			it('and a Server class', function() {
-				expect(server).to.be.ok();
-				expect(riak.server).to.have.property('Server');
-				expect(riak.server.Server).to.be.a('function');
+				expect(server).to.have.property('create');
+				expect(server.create).to.be.a('function');
 			});
 
 			describe('with a Server object', function() {
-				var s = riak()
+				var s = new server()
 				;
 
 				it ('#listResources will report available routes', function(done) {
@@ -38,10 +39,13 @@ describe('RiakIO', function() {
 
 				it ('#listBuckets results in an array of bucket names', function(done) {
 					s.listBuckets(function(err, res) {
-						expect(res).to.be.ok();
-						expect(res.success).to.be('OK');
-						expect(res.result).to.be.an(Array);
-						done(err, res);
+						if (err) done(err);
+						else {
+							expect(res).to.be.ok();
+							expect(res.success).to.be('OK');
+							expect(res.result).to.be.an(Array);
+							done();
+						}
 					});
 				});
 
@@ -50,8 +54,11 @@ describe('RiakIO', function() {
 
 					it('#bucket gets a bucket object', function(done) {
 						s.bucket('examples', function(err, res) {
-							if (!err && res) b = res;
-							done(err, res);
+							if (err) done(err);
+							else {
+								b = res.result;
+								done();
+							}
 						})
 					});
 
@@ -60,10 +67,13 @@ describe('RiakIO', function() {
 
 						it('#keys gets keys from the bucket', function(done) {
 							b.keys(null, function(err, res) {
-								expect(res).to.be.ok();
-								expect(res.keys).to.be('OK');
-								expect(res.keys).to.be.an(Array);
-								done(err, res);
+								if (err) done(err);
+								else {
+									expect(res).to.be.ok();
+									expect(res.success).to.be('OK');
+									expect(res.result).to.be.an(Array);
+									done();
+								}
 							});
 						});
 

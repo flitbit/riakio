@@ -19,15 +19,17 @@
 	"dependencies": {
 		"request": ">=2.11.x",
 		"dbc.js": "1.0.x",
-		"node-oops": "0.1.x",
 		"hooked": "0.1.x",
+		"json-ptr": "~0.1.x",
 		"deep-diff": "0.1.x",
 		"nconf": "0.6.x",
 		"winston": "0.6.x",
 		"extend": "1.0.x",
 		"async": "0.1.x",
-		"lodash": "0.9.x"
-
+		"lodash": "0.9.x",
+		"protobufjs": ">=1.1.0",
+		"url-template": ">=2.0.2",
+	  "webflow": "git://github.com/flitbit/webflow.git"
 	},
 	"devDependencies": {
 			"expect.js": "~0.2.x",

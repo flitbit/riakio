@@ -1,0 +1,9 @@
+{
+	"riakio": {
+		"servers": {
+			"default": {
+				"host": "riak"
+			}
+		}
+	}
+}

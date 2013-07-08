@@ -1,42 +1,30 @@
-
-var config = require('./config')
-, riak   = require('./lib/riak')
-, server = require('./lib/server')
-, bucket = require('./lib/bucket')
-, filters = require('./lib/key_filters')
+var lib = require('./lib')
+, initialized
 ;
 
-function ServerAdapter(url) {
-	url = url || config.get('riak:uri');
-	return server.create(url);
+function $init($config) {
+	if (!initialized) {
+		lib.config($config);
+		initialized = true;
+	}
 }
 
-Object.defineProperties(ServerAdapter, {
+Object.defineProperties($init, {
 
-	config: {
-		value: config,
-		enumerable: true
-	},
+	Riak: { value: lib.Riak, enumerable: true },
 
-	riak: {
-		value: riak,
-		enumerable: true
-	},
+	Server: { value: lib.Server, enumerable: true },
 
-	server: {
-		value: server,
-		enumerable: true
-	},
+	Bucket: { value: lib.Bucket, enumerable: true },
 
-	bucket: {
-		value: bucket,
-		enumerable: true
-	},
+	Items: { value: lib.Items, enumerable: true },
 
-	filters: {
-		value: filters,
-		enumerable: true
-	}
+	JsonItem: { value: lib.JsonItem, enumerable: true },
+
+	KeyFilters: { value: lib.KeyFilters, enumerable: true },
+
+	SecondaryIndex: { value: lib.SecondaryIndex, enumerable: true }
+
 });
 
-module.exports = ServerAdapter;
+module.exports = $init;

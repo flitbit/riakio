@@ -1,13 +1,17 @@
-var util = require('util')
-, log = require('winston')
-, config = require('../').config
-, server = require('../').server
-, filters = require('../').filters
+var util  = require('util')
+, log     = require('winston')
+, nconf   = require('nconf')
+, path    = require('path')
+, riak    = require('../')
+, server  = riak.Server
+, filters = riak.KeyFilters
 ;
 
-var uri = config.get('riak:uri');
+// configure riak so we know where to find the server...
+var config = nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
+riak(config);
 
-var svr = server.create(uri);
+var svr = server.create({ log: log });
 
 function echo(err, res) {
 	if (err) log.error(util.inspect(err, false, 10));
@@ -46,7 +50,6 @@ function getItemsByKey(bucket, keys) {
 			if (err) process.exit();
 
 			process.nextTick(function() { updateItem(res.result); })
-
 		});
 	});
 }
