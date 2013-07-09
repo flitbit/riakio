@@ -23,7 +23,9 @@ Object.defineProperties($init, {
 
 	KeyFilters: { value: lib.KeyFilters, enumerable: true },
 
-	SecondaryIndex: { value: lib.SecondaryIndex, enumerable: true }
+	SecondaryIndex: { value: lib.SecondaryIndex, enumerable: true },
+
+	IndexFilter: { value: lib.IndexFilter, enumerable: true }
 
 });
 

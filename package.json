@@ -18,10 +18,10 @@
 	},
 	"dependencies": {
 		"request": ">=2.11.x",
-		"dbc.js": "1.0.x",
+		"dbc.js": ">1.0.0",
 		"hooked": "0.1.x",
 		"json-ptr": "~0.1.x",
-		"deep-diff": "0.1.x",
+		"deep-diff": ">0.1.0",
 		"nconf": "0.6.x",
 		"winston": "0.6.x",
 		"extend": "1.0.x",
@@ -36,6 +36,6 @@
 			"mocha": "~1.10.x"
 	},
 	"scripts": {
-		"test": "vows --spec ./test/*"
+		"test": "mocha -R spec"
 	}
 }
