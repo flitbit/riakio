@@ -48,7 +48,7 @@ function deleteEach(res) {
 
 function removeAll(res) {
 	var bucket = res.result;
-	bucket.keys(null, then(deleteEach.bind(bucket)));
+	bucket.search.keys(then(deleteEach.bind(bucket)));
 }
 
 function openBucket() {

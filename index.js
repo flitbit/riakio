@@ -17,6 +17,8 @@ Object.defineProperties($init, {
 
 	Bucket: { value: lib.Bucket, enumerable: true },
 
+	Search: { value: lib.Search, enumerable: true },
+
 	Items: { value: lib.Items, enumerable: true },
 
 	JsonItem: { value: lib.JsonItem, enumerable: true },
@@ -25,7 +27,9 @@ Object.defineProperties($init, {
 
 	SecondaryIndex: { value: lib.SecondaryIndex, enumerable: true },
 
-	IndexFilter: { value: lib.IndexFilter, enumerable: true }
+	IndexFilter: { value: lib.IndexFilter, enumerable: true },
+
+	SolrFilter: { value: lib.SolrFilter, enumerable: true }
 
 });
 

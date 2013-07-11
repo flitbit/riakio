@@ -9,6 +9,7 @@ var riak   = require('..')
 , KeyFilters = riak.KeyFilters
 , SecondaryIndex = riak.SecondaryIndex
 , IndexFilter = riak.IndexFilter
+, SolrFilter = riak.SolrFilter
 ;
 
 // SETUP:
@@ -91,12 +92,11 @@ function itemsMatchOwner(owner, res) {
 
 function indexSearchByServerHavingMoreThan(bucket, n) {
 	var server
-	, index = IndexFilter.create('#/server', 'bin')
 	;
 	for(server in server_counts) {
 		if (server_counts[server] > n) {
-			bucket.items.byIndex(
-				index.key(server)
+			bucket.search.index(
+				IndexFilter.create('#/server', 'bin').key(server)
 			, then(echo, itemsMatchServer.bind(null, server)));
 		}
 	}
@@ -108,17 +108,20 @@ function keyFilterByOwnersHavingMoreThanN(bucket, n) {
 	;
 	for(owner in owner_counts) {
 		if (owner_counts[owner] > n) {
-			bucket.mapred({
-				filters: KeyFilters.create(KeyFilters.startsWith(owner))
-			}, then(echo, itemsMatchOwner.bind(null, owner)));
+			bucket.search.mapred( KeyFilters.create(KeyFilters.startsWith(owner))
+			, then(echo, itemsMatchOwner.bind(null, owner))
+			);
 		}
 	}
 }
 
-function queryBucket(bucket, query) {
-	bucket.mapred({
-		query: query
-	}, then(echo));
+function queryBucket(bucket, search) {
+	bucket.search.solr({
+		q: search
+		, index: bucket.name
+	 },
+		then(echo)
+		);
 }
 
 function resetSampleData(_) {
@@ -142,7 +145,7 @@ function resetSampleData(_) {
 // Use 2i to query by server...
 	process.nextTick(function() { indexSearchByServerHavingMoreThan(bucket, 4); });
 // Perform a free-text search...
- 	process.nextTick(function() { queryBucket(bucket, { query: 'title:sunset OR swimsuit' }); });
+ 	process.nextTick(function() { queryBucket(bucket, 'title:sunset OR swimsuit'); });
 }
 
 
