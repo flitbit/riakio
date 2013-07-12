@@ -2,8 +2,7 @@
 	"riakio": {
 		"servers": {
 			"default": {
-				"host": "riakdev.netsteps.local",
-				"port": 80
+				"host": "riakdev.netsteps.local"
 			}
 		}
 	}

@@ -39,7 +39,9 @@ var log = new (winston.Logger)({
 });
 
 // configure riak so we know where to find the server...
-var config = nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
+nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
+var config = nconf.get('riakio');
+
 riak(config);
 
 var server = new riak.Server({ log: log });
@@ -48,7 +50,7 @@ function then() {
 	var fn = Array.prototype.slice.call(arguments);
 	return function(err, res) {
 		if (err) {
-			winston.error(util.inspect(err, false, 10));
+			winston.error(util.inspect(err, true, 10));
 			process.exit();
 		}
 		var i = -1
@@ -64,7 +66,7 @@ function echo(it) {
 	if ('string' === typeof it) {
 		winston.info(it);
 	} else {
-		winston.info(util.inspect(it, false, 10));
+		winston.info(util.inspect(it, true, 99));
 	}
 }
 

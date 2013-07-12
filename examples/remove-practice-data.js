@@ -13,8 +13,9 @@ var log = new (winston.Logger)({
     ]
   });
 
-// configure riak so we know where to find the server...
-var config = nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
+nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
+var config = nconf.get('riakio');
+
 riak(config);
 
 var server = new riak.Server({ log: log });
