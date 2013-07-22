@@ -2,9 +2,9 @@ var lib = require('./lib')
 , initialized
 ;
 
-function $init($config) {
+function $init($riakio_config) {
 	if (!initialized) {
-		lib.config($config);
+		lib.config($riakio_config);
 		initialized = true;
 	}
 }
@@ -17,13 +17,19 @@ Object.defineProperties($init, {
 
 	Bucket: { value: lib.Bucket, enumerable: true },
 
+	Search: { value: lib.Search, enumerable: true },
+
 	Items: { value: lib.Items, enumerable: true },
 
 	JsonItem: { value: lib.JsonItem, enumerable: true },
 
 	KeyFilters: { value: lib.KeyFilters, enumerable: true },
 
-	SecondaryIndex: { value: lib.SecondaryIndex, enumerable: true }
+	SecondaryIndex: { value: lib.SecondaryIndex, enumerable: true },
+
+	IndexFilter: { value: lib.IndexFilter, enumerable: true },
+
+	SolrFilter: { value: lib.SolrFilter, enumerable: true }
 
 });
 
