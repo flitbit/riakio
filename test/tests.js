@@ -64,19 +64,6 @@ describe('RiakIO', function() {
 
 					describe('with a bucket (examples)', function() {
 						var items;
-
-						it('#keys gets keys from the bucket', function(done) {
-							b.keys(null, function(err, res) {
-								if (err) done(err);
-								else {
-									expect(res).to.be.ok();
-									expect(res.success).to.be('OK');
-									expect(res.result).to.be.an(Array);
-									done();
-								}
-							});
-						});
-
 					})
 				})
 
