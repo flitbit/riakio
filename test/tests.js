@@ -22,7 +22,7 @@ describe('RiakIO', function() {
 			});
 
 			describe('with a Server object', function() {
-				var s = new server({ baseUrl: 'http://riak', httpSignature: {} })
+				var s = new server()
 				;
 
 				it ('#listResources will report available routes', function(done) {
