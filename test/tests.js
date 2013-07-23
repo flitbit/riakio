@@ -1,14 +1,15 @@
-var riak = require('..')
-, expect = require('expect.js')
+var riak   = require('..')
+, mocha    = require('mocha')
+, expect   = require('expect.js')
 , nconf    = require('nconf')
 , path     = require('path')
 ;
 
 describe('RiakIO', function() {
 
-// configure riak so we know where to find the server...
+	// configure riak so we know where to find the server...
 	var config = nconf.file(path.normalize(path.join(__dirname, './test-config.json')));
-	riak(config);
+	riak(config.get('riakio'));
 
 	describe('the imported object', function() {
 
@@ -22,7 +23,7 @@ describe('RiakIO', function() {
 			});
 
 			describe('with a Server object', function() {
-				var s = new server({ baseUrl: 'http://riak/', httpSignature: {} })
+				var s = new server()
 				;
 
 				it ('#listResources will report available routes', function(done) {
