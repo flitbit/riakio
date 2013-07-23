@@ -2,7 +2,8 @@
 	"riakio": {
 		"servers": {
 			"default": {
-				"host": "riak"
+				"host": "riak",
+				"port": 80
 			}
 		}
 	}

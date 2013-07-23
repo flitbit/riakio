@@ -13,8 +13,9 @@ var log = new (winston.Logger)({
     ]
   });
 
-// configure riak so we know where to find the server...
-var config = nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
+nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
+var config = nconf.get('riakio');
+
 riak(config);
 
 var server = new riak.Server({ log: log });
@@ -48,7 +49,7 @@ function deleteEach(res) {
 
 function removeAll(res) {
 	var bucket = res.result;
-	bucket.keys(null, then(deleteEach.bind(bucket)));
+	bucket.search.keys(then(deleteEach.bind(bucket)));
 }
 
 function openBucket() {

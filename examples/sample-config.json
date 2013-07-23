@@ -2,7 +2,7 @@
 	"riakio": {
 		"servers": {
 			"default": {
-				"host": "riak"
+				"host": "riakdev.netsteps.local"
 			}
 		}
 	}

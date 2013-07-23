@@ -1,14 +1,15 @@
-var riak = require('..')
-, expect = require('expect.js')
+var riak   = require('..')
+, mocha    = require('mocha')
+, expect   = require('expect.js')
 , nconf    = require('nconf')
 , path     = require('path')
 ;
 
 describe('RiakIO', function() {
 
-// configure riak so we know where to find the server...
+	// configure riak so we know where to find the server...
 	var config = nconf.file(path.normalize(path.join(__dirname, './test-config.json')));
-	riak(config);
+	riak(config.get('riakio'));
 
 	describe('the imported object', function() {
 
@@ -64,19 +65,6 @@ describe('RiakIO', function() {
 
 					describe('with a bucket (examples)', function() {
 						var items;
-
-						it('#keys gets keys from the bucket', function(done) {
-							b.keys(null, function(err, res) {
-								if (err) done(err);
-								else {
-									expect(res).to.be.ok();
-									expect(res.success).to.be('OK');
-									expect(res.result).to.be.an(Array);
-									done();
-								}
-							});
-						});
-
 					})
 				})
 
