@@ -1,10 +1,9 @@
 var util = require('util')
-, config = require('../').config
-, server = require('../').server;
+, config = require('./example_config')
+, riak = require('../')(config)
+;
 
-var uri = config.get('riak:uri');
-
-var svr = server.create(uri);
+var svr = new riak.Server();
 
 function getBucket(name) {
 	svr.bucket(name, function(err, res) {

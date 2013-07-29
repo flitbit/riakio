@@ -1,14 +1,22 @@
 var util = require('util'),
 expect   = require('expect.js'),
-log      = require('winston'),
+winston  = require('winston'),
 extend   = require('extend'),
-config   = require('../config'),
-riak     = require('../index');
+riak     = require('../index')
+config   = require('./example_config')
+;
 
-var uri = config.get('riak:uri');
+riak(config);
+
+// set up a logger so we can see what is happening...
+var log = new (winston.Logger)({
+	transports: [
+	new (winston.transports.Console)({ level: 'info' })
+	]
+});
 
 // list the buckets using the raw (base) Riak object...
-var svr = riak.riak.create(uri);
+var svr = riak.riak.create({log: log});
 
 function itemHandler(err, res) {
 	expect(err).to.be.an('unknown');

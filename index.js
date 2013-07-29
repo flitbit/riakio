@@ -2,11 +2,12 @@ var lib = require('./lib')
 , initialized
 ;
 
-function $init($riakio_config) {
+function $init($config) {
 	if (!initialized) {
-		lib.config($riakio_config);
+		lib.config($config);
 		initialized = true;
 	}
+	return $init;
 }
 
 Object.defineProperties($init, {

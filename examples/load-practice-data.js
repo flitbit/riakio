@@ -1,11 +1,9 @@
-var riak   = require('..')
-, util     = require('util')
+var util   = require('util')
 , winston  = require('winston')
-, request  = require('request')
-, nconf    = require('nconf')
-, path     = require('path')
 , template = require('url-template')
 , data     = require('./practice-data.json')
+, config   = require('./example_config')
+, riak     = require('..')(config)
 , KeyFilters = riak.KeyFilters
 , SecondaryIndex = riak.SecondaryIndex
 , IndexFilter = riak.IndexFilter
@@ -37,10 +35,6 @@ var log = new (winston.Logger)({
 	new (winston.transports.Console)({ level: 'info' })
 	]
 });
-
-// configure riak so we know where to find the server...
-nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
-var config = nconf.get('riakio');
 
 riak(config);
 
@@ -130,22 +124,22 @@ function resetSampleData(_) {
 	var bucket = this
 	, item
 	, imageurl = template.parse("http://farm{farm}.staticflickr.com/{server}/{id}_{secret}_b.jpg");
-	data.forEach(function(ea) {
+//	data.forEach(function(ea) {
 
 // formulate the image url...
-		ea.thumbnailURL = imageurl.expand(ea);
+//		ea.thumbnailURL = imageurl.expand(ea);
 
 // create the item on the bucket...
-		item = bucket.createJsonItem(ea);
+//		item = bucket.createJsonItem(ea);
 
 // store it.
-		item.save(then(echo));
-	});
+//		item.save(then(echo));
+//	});
 
 // Use key filters to query by owner...
-	process.nextTick(function() { keyFilterByOwnersHavingMoreThanN(bucket, 5); });
+//	process.nextTick(function() { keyFilterByOwnersHavingMoreThanN(bucket, 5); });
 // Use 2i to query by server...
-	process.nextTick(function() { indexSearchByServerHavingMoreThan(bucket, 4); });
+//	process.nextTick(function() { indexSearchByServerHavingMoreThan(bucket, 4); });
 // Perform a free-text search...
  	process.nextTick(function() { queryBucket(bucket, 'title:sunset OR swimsuit'); });
 }

@@ -1,9 +1,7 @@
-var riak  = require('..')
-, util    = require('util')
-, path    = require('path')
-, nconf   = require('nconf')
+var util  = require('util')
 , winston = require('winston')
-, request = require('request')
+, config  = require('./example_config')
+, riak    = require('..')(config)
 ;
 
 // set up a logger so we can see what is happening...
@@ -12,11 +10,6 @@ var log = new (winston.Logger)({
       new (winston.transports.Console)({ level: 'info' })
     ]
   });
-
-nconf.file(path.normalize(path.join(__dirname, './sample-config.json')));
-var config = nconf.get('riakio');
-
-riak(config);
 
 var server = new riak.Server({ log: log });
 
