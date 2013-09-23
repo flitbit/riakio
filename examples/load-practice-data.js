@@ -64,6 +64,10 @@ function echo(it) {
 	}
 }
 
+function count(it) {
+	winston.info(it.result.length);
+}
+
 function itemsMatchServer(server, res) {
 	var items = res.result
 	;
@@ -122,24 +126,29 @@ function queryBucket(bucket, search) {
 
 function resetSampleData(_) {
 	var bucket = this
-	, item
-	, imageurl = template.parse("http://farm{farm}.staticflickr.com/{server}/{id}_{secret}_b.jpg");
-//	data.forEach(function(ea) {
+	, item, ea
+	, imageurl = template.parse("http://farm{farm}.staticflickr.com/{server}/{id}_{secret}_b.jpg")
+	, i = -1
+	, len = data.length
+	;
+	// bucket.search.keys(then(count));
 
+	while(++i < len) {
+		ea = data[i];
 // formulate the image url...
-//		ea.thumbnailURL = imageurl.expand(ea);
+		ea.thumbnailURL = imageurl.expand(ea);
 
 // create the item on the bucket...
-//		item = bucket.createJsonItem(ea);
+		item = bucket.createJsonItem(ea);
 
 // store it.
-//		item.save(then(echo));
-//	});
+		item.save(then(echo));
+	}
 
 // Use key filters to query by owner...
-//	process.nextTick(function() { keyFilterByOwnersHavingMoreThanN(bucket, 5); });
+	process.nextTick(function() { keyFilterByOwnersHavingMoreThanN(bucket, 5); });
 // Use 2i to query by server...
-//	process.nextTick(function() { indexSearchByServerHavingMoreThan(bucket, 4); });
+	process.nextTick(function() { indexSearchByServerHavingMoreThan(bucket, 4); });
 // Perform a free-text search...
  	process.nextTick(function() { queryBucket(bucket, 'title:sunset OR swimsuit'); });
 }

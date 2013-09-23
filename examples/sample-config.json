@@ -2,7 +2,7 @@
 	"riakio": {
 		"servers": {
 			"default": {
-				"host": "127.0.0.1",
+				"host": "riakdev.flitbit.local",
 				"port": 8098
 			}
 		}
